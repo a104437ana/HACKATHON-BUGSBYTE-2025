@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  p= produtos.length
   ul
-  each preco in precos
-    li= preco
+  each produto in produtos
+    li= produto
