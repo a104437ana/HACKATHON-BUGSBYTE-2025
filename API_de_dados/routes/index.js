@@ -5,12 +5,12 @@ const cheerio = require('cheerio');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  const url = 'https://epl.di.uminho.pt/~jcr/AULAS/EngWeb2025/aulas.html';
+  const url = 'https://www.continente.pt/mercearia/cafe-cha-e-bebidas-soluveis';
   axios.get(url)
     .then(resp => {
       const $ = cheerio.load(resp.data);
       let precos = []
-      $('h2').each((index, element) => {
+      $('span.ct-price-formatted').each((index, element) => {
         precos.push($(element).text().trim());
         console.log($(element).text());
       });
