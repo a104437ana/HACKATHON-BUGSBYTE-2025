@@ -37,6 +37,7 @@ script.
             suggestionsContainer.innerHTML = '';
             suggestionsContainer.style.display = 'none';
             form.submit();
+            searchInput.value = suggestion.product_dsc;
           };
           suggestionsContainer.appendChild(suggestionItem);
         });
