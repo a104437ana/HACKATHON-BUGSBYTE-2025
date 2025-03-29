@@ -111,9 +111,9 @@ router.get('/produtos', function(req, res, next) {
 
 // GET PRODUCT
 router.get('/produtos/:id', function(req, res, next) {
-  axios.get(`http://localhost:3000/products_info?id=${req.params.id}`)
+  axios.get(`http://localhost:3000/products_info/${req.params.id}`)
   .then(resp => {
-    res.status(200).jsonp(resp.data[0])
+    res.status(200).jsonp(resp.data)
   })
   .catch(error => {
     console.log(error)
@@ -141,7 +141,7 @@ router.get('/produtos_info', function(req, res, next) {
 
 // GET PRODUCT nome e id
 router.get('/produtos_info/:id', function(req, res, next) {
-  axios.get(`http://localhost:3000/products_info?id=${req.params.id}`)
+  axios.get(`http://localhost:3000/products_info/${req.params.id}`)
   .then(resp => {
     if (resp.data.length == 1) {
       const product = resp.data[0]
