@@ -3,8 +3,10 @@
   .autocomplete-suggestions(class="w3-input w3-border w3-round" id="suggestions-container")
 
 style.
-  .autocomplete-suggestions {
-    display: none; 
+  .w3-container .autocomplete-suggestions {
+    display: none;
+    background-color:rgb(255, 255, 255) !important; 
+    color: #000; 
   }
 
 script.
@@ -17,13 +19,11 @@ script.
     const query = searchInput.value.toLowerCase();
     suggestionsContainer.innerHTML = '';
 
-    // Verifica se o campo de pesquisa tem algum valor
     if (query) {
       const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
 
-      // Se houver sugestões, mostra o container e popula com as sugestões
       if (filteredSuggestions.length > 0) {
-        suggestionsContainer.style.display = 'block'; // Torna o container visível
+        suggestionsContainer.style.display = 'block'; 
         filteredSuggestions.forEach(suggestion => {
           const suggestionItem = document.createElement('div');
           suggestionItem.classList.add('autocomplete-suggestion');
@@ -31,14 +31,14 @@ script.
           suggestionItem.onclick = () => {
             searchInput.value = suggestion;
             suggestionsContainer.innerHTML = '';
-            suggestionsContainer.style.display = 'none'; // Oculta novamente após a seleção
+            suggestionsContainer.style.display = 'none';
           };
           suggestionsContainer.appendChild(suggestionItem);
         });
       } else {
-        suggestionsContainer.style.display = 'none'; // Se não houver sugestões, esconde o container
+        suggestionsContainer.style.display = 'none'; 
       }
     } else {
-      suggestionsContainer.style.display = 'none'; // Se o campo de busca estiver vazio, esconde o container
+      suggestionsContainer.style.display = 'none';
     }
   });
