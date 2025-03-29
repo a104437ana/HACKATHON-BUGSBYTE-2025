@@ -1,12 +1,23 @@
-.w3-container.search-container
-  input(class="w3-input w3-border w3-round" type="text" id="search" placeholder="Produto" autocomplete="off")
-  .autocomplete-suggestions(class="w3-input w3-border w3-round" id="suggestions-container")
+.w3-container.search-container.w3-bar
+  form(action='/search', method='POST')
+    input(class="w3-input w3-border w3-round w3-bar-item w3-left-align" type="text" id="search" name="search" placeholder="Produto" autocomplete="off")
+    .autocomplete-suggestions(class="w3-input w3-border w3-round" id="suggestions-container")
+    .w3-bar-item.w3-right
+      button(type="submit" class="w3-btn w3-blue w3-round")
+        img(src="/images/search.png" style="width: 20px; height: 20px;")
 
 style.
   .w3-container .autocomplete-suggestions {
     display: none;
     background-color:rgb(255, 255, 255) !important; 
     color: #000; 
+  }
+
+  .w3-btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px; 
   }
 
 script.

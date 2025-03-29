@@ -4,22 +4,19 @@ block content
   .w3-container
     h1
       b= title
-    p Welcome to #{title}
     p
 
     include components/searchBar.pug
 
-    table.w3-table-all
-            tr.w3-red.w3-text-black
-                th Produto
-                th Concorrência
-                th Preço
-            tr
-                td OI
-                td A
-                td fff
-            tr
-                td OI
-                td A
-                td fff
+    if prices && prices.length > 0
+      table.w3-table-all
+        tr.w3-red.w3-text-black
+          th Loja
+          th Concorrência
+          th Preço
+        each price in prices
+          tr
+            td= price.store
+            td= price.competitor
+            td= price.price
     p
