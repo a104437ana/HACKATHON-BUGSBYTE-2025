@@ -42,4 +42,12 @@ router.post('/search', (req, res) => {
   console.log(resp.data["20231226"])});
 });
 
+router.get('/atualizaprecos', async function(req, res, next) {
+  let pagina = 0
+  for (pagina = 0; pagina < 150; pagina+=1) {
+    await axios.get(`http://localhost:3001/continente/${pagina}`)
+    console.log(`Pagina ${pagina}`)
+  }
+});
+
 module.exports = router;

@@ -23,3 +23,7 @@ BUGBUSTERS
 
 ## Continente
 
+values variacao
+sku
+time
+count vendas

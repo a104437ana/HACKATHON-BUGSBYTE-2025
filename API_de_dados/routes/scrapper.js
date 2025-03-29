@@ -94,7 +94,7 @@ router.get('/continente/:id', async function(req, res, next) {
       catch (error) {
       }
   }
-  res.status(200)
+  res.status(200).send("")
 });
 
 // GET PRODUCTS
