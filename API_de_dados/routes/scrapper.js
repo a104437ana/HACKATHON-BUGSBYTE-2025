@@ -2,54 +2,77 @@ var express = require('express');
 var router = express.Router();
 const axios = require('axios');
 const cheerio = require('cheerio');
+const xml2js = require('xml2js');
+
 
 /* GET home page. */
 router.get('/continente/', async function(req, res, next) {
   step = 36
 //  total = 5422
   total = 360
-  start = 0
-  let url = `https://www.continente.pt/mercearia/?start${start}`;
-  let produtos = []
-
-  while (start < total) {
-    url = `https://www.continente.pt/mercearia/?start${start}`;
-    await axios.get(url)
-      .then(resp => {
-        const $ = cheerio.load(resp.data);
-        $('.product').each((index, element) => {
-          const productStr = $(element).find('div').attr('data-product-tile-impression');
-
-          if (productStr) {
-            try {
-              const product = JSON.parse(productStr);
-              produtos.push(product);
-            }
-            catch (error) {
-//              console.log(`Erro ao fazer parse do objeto: ${productStr}`);
-            }
+  let url = "https://www.continente.pt/sitemap-custom_sitemap_1-product.xml";
+  let lista_urls = [];
+  await axios.get(url)
+    .then(response => {
+      const parser = new xml2js.Parser();
+      parser.parseString(response.data, (err, result) => {
+        if (err) {
+          console.error("Erro ao parsear o XML:", err);
+          return;
+        }
+        // Acessando as URLs dentro da estrutura XML convertida
+        const urls = result.urlset.url;
+        urls.forEach(item => {
+          if (item.loc && item.loc[0]) {
+            lista_urls.push(item.loc[0]);
           }
         });
-      })
-      .catch(error => {
-        console.log(error)
-        res.render('error', {error: error})
-      })
-    start += step;
-  }
-  for (let produto of produtos) {
-      let id = parseInt(produto.id)
-      try {
-        const resp = await axios.get(`http://localhost:3000/products_info/${id}`)
-        let prod = resp.data
-        if (prod) {
-          prod["product_price"] = produto.price
-          await axios.put(`http://localhost:3000/products_info/${id}`, prod)
+      });
+    })
+    .catch(error => {
+      console.error("Erro na requisição:", error);
+    });
+  
+       let produtos = []
+       let id = 0
+
+       for (let url of lista_urls) {
+        await axios.get(url)
+          .then(resp => {
+            const $ = cheerio.load(resp.data);
+            const productId = url.match(/(\d+).html/)[1];
+            const productName = $('.pwc-h3.col-h3.product-name.pwc-font--primary-extrabold.mb-0').text().trimStart().replace(/^\s/, '').trimEnd().replace(/\s$/, '');
+            const productPrice = $('.ct-price-formatted').text().trimStart().replace(/^\s/, '').trimEnd().replace(/\s$/, '').replace(/€/, '').replace(/,/, '.');
+            if (productName && productPrice) {
+              try {
+                const product_obj = {"id": productId, "product_dsc": productName, "product_price": productPrice}
+                const productStr = JSON.stringify(product_obj);
+                const product = JSON.parse(productStr)
+                produtos.push(product);
+                id += 1
+              }
+              catch (error) {
+              }
+            }
+          })
+          .catch(error => {
+            console.log(error)
+            res.render('error', {error: error})
+          })
+       }
+     for (let produto of produtos) {
+         let id = parseInt(produto.id)
+           try {
+             const resp = await axios.get(`http://localhost:3000/products_info/${id}`)
+              let prod = resp.data
+              if (prod) {
+                prod["product_price"] = produto.price
+                await axios.put(`http://localhost:3000/products_info/${id}`, prod)
+              }
+            }
+            catch (error) {
+            }
         }
-      }
-      catch (error) {
-      }
-  }
 //  res.render('index', { title: 'Express', produtos:  produtos});
 //  res.status(200).jsonp(produtos)
   res.status(200).send("Precos atualizados")
