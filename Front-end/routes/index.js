@@ -18,13 +18,16 @@ router.get('/cabazes', async function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
   let produtos = [6927230, 5254224, 6654470, 2456648, 6022110, 6927230, 3795692]
   let total_cabaz = 0
+  let i = 0
 
   for (let product of produtos) {
     await axios.get(`http://localhost:3001/produtos/${product}`)
       .then(resp => {
         total_cabaz += resp.data["20231226"];
+        i += 1
       });
   }
+    total_cabaz = total_cabaz/i
     console.log(total_cabaz)
       res.status(200).render("cabazes", {title: "Cabazes", date: date, cabazes: [{name: "Cabaz essencial", price: total_cabaz}]})
   }); 

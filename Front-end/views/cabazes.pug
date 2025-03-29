@@ -15,3 +15,23 @@ block content
               td= cabaz.name
               td= cabaz.price
     p
+    - let p = (cabazes[0].price * 100).toFixed(1)
+    if cabazes[0].price == 1
+      .w3-panel.w3-yellow
+        p O produto&nbsp;
+          b #{nome}&nbsp;
+          span no continente tem o mesmo preço que na concorrência&nbsp;
+    else if cabazes[0].price < 1
+      .w3-panel.w3-green
+        p O produto&nbsp;
+          b #{nome}&nbsp;
+          span no continente está mais barato&nbsp;
+          b #{p}%&nbsp; 
+          span que na concorrência&nbsp;
+    else if cabazes[0].price > 1
+      .w3-panel.w3-red
+        p O produto&nbsp;
+          b #{nome}&nbsp;
+          span no continete está mais caro&nbsp;
+          b #{p}%&nbsp;
+          span que na concorrência&nbsp;
