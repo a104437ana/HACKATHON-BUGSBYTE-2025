@@ -24,7 +24,13 @@ script.
     suggestionsContainer.innerHTML = '';
 
     if (query) {
-      const filteredSuggestions = suggestions.filter(item => item.product_dsc.toLowerCase().includes(query));
+      const filteredSuggestions = suggestions
+        .filter(item => item.product_dsc.toLowerCase().includes(query.toLowerCase()))
+        .sort((a, b) => {
+          const aStarts = a.product_dsc.toLowerCase().startsWith(query.toLowerCase());
+          const bStarts = b.product_dsc.toLowerCase().startsWith(query.toLowerCase());
+          return bStarts - aStarts; // Prioriza os que começam com o termo
+        });
 
       if (filteredSuggestions.length > 0) {
         suggestionsContainer.style.display = 'block'; 
