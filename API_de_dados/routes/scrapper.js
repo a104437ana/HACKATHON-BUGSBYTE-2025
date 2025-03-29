@@ -1,19 +1,35 @@
+var express = require('express');
+var router = express.Router();
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-async function scrape() {
-  try {
-    const url = 'https://continente.pt/mercearia/cafe-cha-e-bebidas-soluveis';
-    const { data } = await axios.get(url);
+/* GET home page. */
+router.get('/', async function(req, res, next) {
+  step = 36
+//  total = 5422
+  total = 100
+  start = 0
+  let url = `https://www.continente.pt/mercearia/?start${start}`;
+  let produtos = []
 
-    const $ = cheerio.load(data);
-
-    $(span.preco).each((index, element) => {
-      console.log(element);
-    });
-  } catch (error) {
-    console.error('Erro ao fazer o scrape:', error);
+  while (start < total) {
+    url = `https://www.continente.pt/mercearia/?start${start}`;
+    await axios.get(url)
+      .then(resp => {
+        const $ = cheerio.load(resp.data);
+        $('.product').each((index, element) => {
+          const product = $(element).find('div').attr('data-product-tile-impression');
+          produtos.push(product);
+          console.log(product);
+        });
+      })
+      .catch(error => {
+        console.log(error)
+        res.render('error', {error: error})
+      })
+    start += step;
   }
-}
+  res.render('index', { title: 'Express', produtos:  produtos});
+});
 
-scrape();
+module.exports = router;
