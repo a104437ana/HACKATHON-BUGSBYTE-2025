@@ -1,6 +1,6 @@
 .w3-container.search-container
   form(action='/search', method='POST', id='searchForm')
-    input(type='text', id='search', name='search', placeholder='Produto', autocomplete='off')
+    input.w3-input.w3-border(type='text', id='search', name='search', placeholder='Produto', autocomplete='off')
     .autocomplete-suggestions(id='suggestions-container')
 
 style.
@@ -8,7 +8,7 @@ style.
     display: none;
     background-color:rgb(255, 255, 255) !important; 
     color: #000; 
-    height: 400px;
+    max-height: 700px;
     overflow-y : scroll;
   }
 
