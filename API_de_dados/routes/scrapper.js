@@ -111,7 +111,7 @@ router.get('/produtos', function(req, res, next) {
 
 // GET PRODUCT
 router.get('/produtos/:id', function(req, res, next) {
-  axios.get(`http://localhost:3000/products_info?sku=${req.params.id}`)
+  axios.get(`http://localhost:3000/products_info?id=${req.params.id}`)
   .then(resp => {
     res.status(200).jsonp(resp.data[0])
   })
@@ -127,7 +127,7 @@ router.get('/produtos_info', function(req, res, next) {
   .then(resp => {
     const filteredProducts = resp.data.map(product => {
       return {
-        sku: product.sku,
+        id: product.id,
         product_dsc: product.product_dsc
       }
     })
@@ -141,12 +141,12 @@ router.get('/produtos_info', function(req, res, next) {
 
 // GET PRODUCT nome e id
 router.get('/produtos_info/:id', function(req, res, next) {
-  axios.get(`http://localhost:3000/products_info?sku=${req.params.id}`)
+  axios.get(`http://localhost:3000/products_info?id=${req.params.id}`)
   .then(resp => {
     if (resp.data.length == 1) {
       const product = resp.data[0]
       const filteredProduct = {
-        sku: product.sku,
+        id: product.id,
         product_dsc: product.product_dsc
       }
       res.status(200).jsonp(filteredProduct)
