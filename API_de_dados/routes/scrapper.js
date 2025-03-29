@@ -79,7 +79,7 @@ router.get('/produtos_info', function(req, res, next) {
   })
   .catch(error => {
     console.log(error)
-    res.render('error', {error: error})
+    res.status(500).render('error', {error: error})
   })
 });
 
