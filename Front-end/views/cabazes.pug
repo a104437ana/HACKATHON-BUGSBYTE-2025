@@ -21,25 +21,25 @@ block content
                     li
                       a.w3-hover-text-blue(href=`/produtos/${ll[i]}`)= l
                     - i+=1
-              td= cabaz.price
+              td= cabaz.total
     p
-    - let p = Math.abs((100 - (cabazes[0].price * 100)).toFixed(1))
-    if cabazes[0].price == 1
+    - let p = Math.abs((100 - (cabazes[0].indice * 100)).toFixed(1))
+    if cabazes[0].indice == 1
       .w3-panel.w3-yellow
         p O cabaz&nbsp;
           b #{nome}&nbsp;
-          span no continente tem o mesmo preço que na concorrência&nbsp;
-    else if cabazes[0].price < 1
+          span no Continente tem o mesmo preço que na concorrência&nbsp;
+    else if cabazes[0].indice < 1
       .w3-panel.w3-green
         p O cabaz&nbsp;
           b #{nome}&nbsp;
-          span no continente está mais barato&nbsp;
+          span no Continente está mais barato&nbsp;
           b #{p}%&nbsp; 
           span que na concorrência&nbsp;
-    else if cabazes[0].price > 1
+    else if cabazes[0].indice > 1
       .w3-panel.w3-red
         p O cabaz&nbsp;
           b #{nome}&nbsp;
-          span no continete está mais caro&nbsp;
+          span no Continente está mais caro&nbsp;
           b #{p}%&nbsp;
           span que na concorrência&nbsp;
