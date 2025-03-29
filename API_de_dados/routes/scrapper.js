@@ -6,10 +6,7 @@ const xml2js = require('xml2js');
 
 
 /* GET home page. */
-router.get('/continente/', async function(req, res, next) {
-  step = 36
-//  total = 5422
-  total = 360
+router.get('/continente', async function(req, res, next) {
   let url = "https://www.continente.pt/sitemap-custom_sitemap_1-product.xml";
   let lista_urls = [];
   await axios.get(url)
@@ -49,6 +46,7 @@ router.get('/continente/', async function(req, res, next) {
                 const productStr = JSON.stringify(product_obj);
                 const product = JSON.parse(productStr)
                 produtos.push(product);
+                console.log(product)
                 id += 1
               }
               catch (error) {
@@ -67,6 +65,7 @@ router.get('/continente/', async function(req, res, next) {
               let prod = resp.data
               if (prod) {
                 prod["product_price"] = produto.price
+                console.log(prod)
                 await axios.put(`http://localhost:3000/products_info/${id}`, prod)
               }
             }
@@ -194,6 +193,13 @@ router.get('/minipreco/mercearia', async function(req, res, next) {
   let produtos = []
   let id = 0
 
+  const resp = await axios.get(`http://localhost:3000/products_info`)
+  const produtosContinente_list = resp.data.map(product => product.product_dsc)
+  let produtosContinente_map = {}
+  resp.data.map(product => {
+    produtosContinente_map[product.product_dsc] = product.id
+  })
+
   while (start < total) {
     url = `https://www.minipreco.pt/produtos/mercearia/c/WEB.003.000.00000?q=%3Arelevance&page=${start}&disp=2000`;
     try {
@@ -203,7 +209,7 @@ router.get('/minipreco/mercearia', async function(req, res, next) {
         const productName = $(element).find('.details').text().trimStart().replace(/^\s/, '');
         const productPrice = $(element).find('.price').text().trimStart().replace(/^\s/, '');
 
-        if (productName && productPrice) {
+        if (productName && productPrice && (productName in produtosContinente_list)) {
           try {
             const product_obj = {"id": id, "product_dsc": productName, "product_price": productPrice}
             const productStr = JSON.stringify(product_obj);
