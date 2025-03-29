@@ -3,6 +3,7 @@ var router = express.Router();
 const axios = require('axios');
 const cheerio = require('cheerio');
 const xml2js = require('xml2js');
+const natural = require('natural');
 
 
 /* GET home page. */
@@ -217,11 +218,11 @@ router.get('/produtos_info/:id', function(req, res, next) {
 
 router.get('/minipreco/mercearia', async function(req, res, next) {
   step = 1
-//  total = 183
-  total = 1
+  total = 183
+//  total = 1
   start = 0
   let url = `https://www.minipreco.pt/produtos/mercearia/c/WEB.003.000.00000?q=%3Arelevance&page=${start}&disp=2000`;
-  let produtos = []
+//  let produtos = []
   let id = 0
 
   const resp = await axios.get(`http://localhost:3000/products_info`)
@@ -238,20 +239,39 @@ router.get('/minipreco/mercearia', async function(req, res, next) {
       const $ = cheerio.load(resp.data);
       const productPromises = $('.product-list__item').map(async (index, element) => {
         const productName = $(element).find('.details').text().trimStart().replace(/^\s/, '');
-        const productPrice = $(element).find('.price').text().trimStart().replace(/^\s/, '');
+        const productPrice = $(element).find('.price').text().trimStart().replace(/^\s/, '').replace(/€/, '').trimEnd().replace(/\s$/, '');
 
-        if (productName && productPrice && (productName in produtosContinente_list)) {
-          try {
-            const product_obj = {"id": id, "product_dsc": productName, "product_price": productPrice}
-            const productStr = JSON.stringify(product_obj);
-            const product = JSON.parse(productStr)
-            await axios.post(`https://localhost:3000/minipreco`, product)
-            produtos.push(product);
-            id += 1
-          }
-          catch (error) {
+        console.log(id)
+        if (productName && productPrice) {
+          let bestMatch = null
+          let highestScore = 0
+          produtosContinente_list.forEach(item => {
+            let itemContinente = item
+            let similarity = natural.JaroWinklerDistance(productName.toUpperCase(), item.toUpperCase())
+            if (similarity > highestScore) {
+              highestScore = similarity
+              bestMatch = itemContinente
+            }
+          })
+          if (highestScore > 0.88) {
+            try {
+              let id_continente = produtosContinente_map[bestMatch]
+              const respContinente = await axios.get(`http://localhost:3000/products_info/${id_continente}`)
+              let product = respContinente.data
+              product["preco_minipreco"] = productPrice
+  //            const product_obj = {"id": id, "product_dsc": productName, "product_price": productPrice}
+  //            const productStr = JSON.stringify(product_obj);
+  //            const product = JSON.parse(productStr)
+  //            console.log(product)
+              await axios.put(`https://localhost:3000/products_info/${id_continente}`, product)
+  //            produtos.push(product);
+            }
+            catch (error) {
+              console.log("Erro: " + productName + " " + highestScore)
+            }
           }
         }
+        id += 1
       }).get()
       await Promise.all(productPromises);
     }
@@ -273,6 +293,7 @@ router.get('/minipreco/mercearia', async function(req, res, next) {
       console.log(error)
       res.render('error', {error: error})
     })*/
+   res.status(200).send("")
 });
 
 router.get('/minipreco/:id', async function(req, res, next) {
