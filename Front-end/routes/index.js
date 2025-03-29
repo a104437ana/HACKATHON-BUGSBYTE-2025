@@ -3,9 +3,14 @@ var router = express.Router();
 var axios = require('axios');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/produtos', function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
-  res.status(200).render("index", {title: "Produtos", date: date});
+  res.status(200).render("produtos", {title: "Produtos", date: date});
+});
+
+router.get('/cabazes', function(req, res, next) {
+  var date = new Date().toLocaleString('pt-PT', { hour12: false });
+  res.status(200).render("cabazes", {title: "Cabazes", date: date});
 });
 
 module.exports = router;
