@@ -1,6 +1,13 @@
 extends layout
 
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  .w3-container(style= "min-height: 835px;")
+    if m
+      h1
+        b= m
+    else
+      h1
+        b= message
+      h2
+        b= error.status
+      //pre #{error.stack}

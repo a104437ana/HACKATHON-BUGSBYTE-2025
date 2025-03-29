@@ -14,6 +14,19 @@ router.get('/produtos', function(req, res, next) {
   .then(resp => res.status(200).render("produtos", {title: "Produtos", date: date, suggestions: resp.data}))
 });
 
+router.get('/produtos/:id',function(req,res,next) {
+  var product = req.params.id;
+  var date = new Date().toLocaleString('pt-PT', { hour12: false });
+    axios.get(`http://localhost:3001/produtos/${product}`)
+    .then(resp => {
+      if (resp.data["product_dsc"] === undefined) {
+        res.render('error',{title: "Erro", date: date, m:"Produto não existe"});
+      } else {
+      res.status(200).render("produto", {title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["id"], date: date, suggestions: [], prices : [{store: "Continente", price: resp.data["20231226"]}
+      ]})}
+    console.log(resp.data["20231226"])});
+})
+
 router.get('/cabazes', async function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
   let produtos = [6927230, 5254224, 6654470, 2456648, 6022110, 6927230, 3795692]
@@ -39,9 +52,7 @@ router.post('/search', (req, res) => {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
   const suggestionObject = JSON.parse(req.body.search); 
   const product = suggestionObject.id;
-  axios.get(`http://localhost:3001/produtos/${product}`)
-  .then(resp => {res.status(200).render("produto", {title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["id"], date: date, suggestions: [], prices : [{store: "Continente", price: resp.data["20231226"]}]})
-  console.log(resp.data["20231226"])});
+  res.redirect(`/produtos/${product}`);
 });
 
 router.get('/atualizaprecos', async function(req, res, next) {

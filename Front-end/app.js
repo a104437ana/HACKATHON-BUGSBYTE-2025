@@ -33,7 +33,8 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  var date = new Date().toLocaleString('pt-PT', { hour12: false });
+  res.render('error',{title: "Erro", date: date, error: err});
 });
 
 module.exports = app;
