@@ -3,18 +3,29 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='icon', type='image/png', href='/images/contratos.png')
+    link(rel='icon', type='image/png', href='/images/continente.png')
     meta(charset='utf-8')
+    style.
+      .w3-text-theme {
+        color: #66b22e !important;
+      }
   body
-    .w3-card-4
-      header.w3-bar.w3-green.w3-text-black.w3-bottombar.w3-border-green
+    .w3-card-4.w3-pale-red
+      header.w3-card-4.w3-bar.w3-white.w3-text-black
         h1
-          span.w3-bar-item.w3-left= title
-          if title != "Contratos"
-            a.w3-bar-item.w3-right.w3-hover-text-white(href='/') Voltar
+          span.w3-bar-item.w3-left-align
+            img(src='/images/continente.gif', width='200')
+          b
+            a.w3-bar-item.w3-left-align.w3-button.w3-hover-white.w3-hover-text-red(href='/produtos') Produtos
+          b
+            a.w3-bar-item.w3-left-align.w3-button.w3-hover-white.w3-hover-text-red(href='/cabazes') Cabazes
+          span.w3-bar-item.w3-right
+            img(src='/images/sonae.png', width='110')
       block content
-      footer.w3-container.w3-large.w3-black.w3-text-green
-        adress
+      footer.w3-container.w3-large.w3-black.w3-text-theme.w3-bar
+        adress.w3-bar-item.w3-left-align
           span Gerado por 
             b BUGBUSTERS 
           span em #{date}
+        .w3-bar-item.w3-right
+          img(src='/images/bugsbytes.png', width='150')
