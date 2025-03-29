@@ -22,11 +22,11 @@ router.get('/cabazes', function(req, res, next) {
 
 router.post('/search', (req, res) => {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
-  console.log(req.body)
   const suggestionObject = JSON.parse(req.body.search); 
   const product = suggestionObject.sku;
-  axios.get(`http://localhost:3001/produtos/${product.sku}`)
-  .then(resp => res.status(200).render("produtos", {title: "Produtos", date: date, suggestions: [], prices : resp.data["20231226"]}));
+  axios.get(`http://localhost:3001/produtos/${product}`)
+  .then(resp => {res.status(200).render("produtos", {title: "Produtos", date: date, suggestions: [], prices : [{store: "Continente", price: resp.data["20231226"]}]})
+  console.log(resp.data["20231226"])});
 });
 
 module.exports = router;
