@@ -31,16 +31,16 @@ script.
     suggestionsContainer.innerHTML = '';
 
     if (query) {
-      const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
+      const filteredSuggestions = suggestions.filter(item => item.product_dsc.toLowerCase().includes(query));
 
       if (filteredSuggestions.length > 0) {
         suggestionsContainer.style.display = 'block'; 
         filteredSuggestions.forEach(suggestion => {
           const suggestionItem = document.createElement('div');
           suggestionItem.classList.add('autocomplete-suggestion');
-          suggestionItem.textContent = suggestion;
+          suggestionItem.textContent = suggestion.product_dsc;
           suggestionItem.onclick = () => {
-            searchInput.value = suggestion;
+            searchInput.value = suggestion.product_dsc;
             suggestionsContainer.innerHTML = '';
             suggestionsContainer.style.display = 'none';
           };

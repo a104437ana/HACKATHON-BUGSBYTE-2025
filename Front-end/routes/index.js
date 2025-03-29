@@ -10,7 +10,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 /* GET home page. */
 router.get('/produtos', function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
-  res.status(200).render("produtos", {title: "Produtos", date: date, suggestions: ['Arroz', 'Leite']});
+  axios.get('http://localhost:3001/produtos_info')
+  .then(resp => res.status(200).render("produtos", {title: "Produtos", date: date, suggestions: resp.data}))
 });
 
 router.get('/cabazes', function(req, res, next) {
