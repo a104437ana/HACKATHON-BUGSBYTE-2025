@@ -57,11 +57,52 @@ router.get('/produtos', function(req, res, next) {
 router.get('/produtos/:id', function(req, res, next) {
   axios.get(`http://localhost:3000/products_info?sku=${req.params.id}`)
   .then(resp => {
-    res.status(200).jsonp(resp.data)
+    res.status(200).jsonp(resp.data[0])
   })
   .catch(error => {
     console.log(error)
     res.render('error', {error: error})
+  })
+});
+
+// GET PRODUCTS nome e id
+router.get('/produtos_info', function(req, res, next) {
+  axios.get(`http://localhost:3000/products_info`)
+  .then(resp => {
+    const filteredProducts = resp.data.map(product => {
+      return {
+        sku: product.sku,
+        product_dsc: product.product_dsc
+      }
+    })
+    res.status(200).jsonp(filteredProducts)
+  })
+  .catch(error => {
+    console.log(error)
+    res.render('error', {error: error})
+  })
+});
+
+// GET PRODUCT nome e id
+router.get('/produtos_info/:id', function(req, res, next) {
+  axios.get(`http://localhost:3000/products_info?sku=${req.params.id}`)
+  .then(resp => {
+    if (resp.data.length == 1) {
+      const product = resp.data[0]
+      const filteredProduct = {
+        sku: product.sku,
+        product_dsc: product.product_dsc
+      }
+      res.status(200).jsonp(filteredProduct)
+    }
+    else {
+      console.log("Produto não encontrado")
+      res.status(404).render('error', {error: error})
+    }
+  })
+  .catch(error => {
+    console.log(error)
+    res.status(500).render('error', {error: error})
   })
 });
 
