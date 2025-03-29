@@ -1,7 +1,7 @@
 .w3-container.search-container
-  form(action='/search', method='POST')
-    input(class="w3-input w3-border w3-round" type="text" id="search" placeholder="Produto" autocomplete="off")
-    .autocomplete-suggestions(class="w3-input w3-border w3-round" id="suggestions-container")
+  form(action='/search', method='POST', id='searchForm')
+    input(type='text', id='search', name='search', placeholder='Produto', autocomplete='off')
+    .autocomplete-suggestions(id='suggestions-container')
 
 style.
   .w3-container .autocomplete-suggestions {
@@ -33,7 +33,7 @@ script.
           suggestionItem.classList.add('autocomplete-suggestion');
           suggestionItem.textContent = suggestion.product_dsc;
           suggestionItem.onclick = () => {
-            searchInput.value = suggestion;
+            searchInput.value = JSON.stringify(suggestion);
             suggestionsContainer.innerHTML = '';
             suggestionsContainer.style.display = 'none';
             form.submit();

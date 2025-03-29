@@ -6,17 +6,19 @@ block content
       b= title
     p
 
-    include components/searchBar.pug
+    if suggestions && suggestions.length>0
+      include components/searchBar.pug
 
-    if prices && prices.length > 0
-      table.w3-table-all
-        tr.w3-red.w3-text-black
-          th Loja
-          th Concorrência
-          th Preço
-        each price in prices
-          tr
-            td= price.store
-            td= price.competitor
-            td= price.price
+    else
+      if prices && prices.length > 0
+        table.w3-table-all
+          tr.w3-red.w3-text-black
+            th Loja
+            th Concorrência
+            th Preço
+          each price in prices
+            tr
+              td= price.store
+              td= price.competitor
+              td= price.price
     p
