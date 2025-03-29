@@ -1,31 +1,17 @@
 extends layout
 
 block content
-  .w3-container
+  .w3-container(style= "min-height: 800px;")
     h1
       b= title
-    p Welcome to #{title}
     p
-    table.w3-table-all
-            tr.w3-red.w3-text-black
-                th Cabaz
-                th Produtos
-                th Concorrência
-                th Preço
+    if cabazes && cabazes.length > 0
+        table.w3-table-all
+          tr.w3-red.w3-text-black
+            th Cabaz
+            th Preço
+          each cabaz in cabazes
             tr
-                td OI
-                td
-                    ul.w3-ul
-                        li oi
-                        li ai
-                td A
-                td fff
-            tr
-                td OI
-                td
-                    ul.w3-ul
-                        li oi
-                        li ai
-                td A
-                td fff
+              td= cabaz.name
+              td= cabaz.price
     p
