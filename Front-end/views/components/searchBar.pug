@@ -1,0 +1,44 @@
+.w3-container.search-container
+  input(class="w3-input w3-border w3-round" type="text" id="search" placeholder="Produto" autocomplete="off")
+  .autocomplete-suggestions(class="w3-input w3-border w3-round" id="suggestions-container")
+
+style.
+  .autocomplete-suggestions {
+    display: none; 
+  }
+
+script.
+  const suggestions = !{JSON.stringify(suggestions)};
+
+  const searchInput = document.getElementById('search');
+  const suggestionsContainer = document.getElementById('suggestions-container');
+
+  searchInput.addEventListener('input', function() {
+    const query = searchInput.value.toLowerCase();
+    suggestionsContainer.innerHTML = '';
+
+    // Verifica se o campo de pesquisa tem algum valor
+    if (query) {
+      const filteredSuggestions = suggestions.filter(item => item.toLowerCase().includes(query));
+
+      // Se houver sugestões, mostra o container e popula com as sugestões
+      if (filteredSuggestions.length > 0) {
+        suggestionsContainer.style.display = 'block'; // Torna o container visível
+        filteredSuggestions.forEach(suggestion => {
+          const suggestionItem = document.createElement('div');
+          suggestionItem.classList.add('autocomplete-suggestion');
+          suggestionItem.textContent = suggestion;
+          suggestionItem.onclick = () => {
+            searchInput.value = suggestion;
+            suggestionsContainer.innerHTML = '';
+            suggestionsContainer.style.display = 'none'; // Oculta novamente após a seleção
+          };
+          suggestionsContainer.appendChild(suggestionItem);
+        });
+      } else {
+        suggestionsContainer.style.display = 'none'; // Se não houver sugestões, esconde o container
+      }
+    } else {
+      suggestionsContainer.style.display = 'none'; // Se o campo de busca estiver vazio, esconde o container
+    }
+  });
