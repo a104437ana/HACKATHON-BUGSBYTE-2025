@@ -9,6 +9,19 @@ const xml2js = require('xml2js');
 router.get('/continente', async function(req, res, next) {
   let url = "https://www.continente.pt/sitemap-custom_sitemap_1-product.xml";
   let lista_urls = [];
+  let ids = [];
+
+  axios.get('http://localhost:3000/products_info')
+    .then(response => {
+      // Acessar o array de objetos e mapear para pegar o id de cada objeto
+      ids = response.data.map(product => String(product.id).trim());
+      console.log("IDs:", ids);  // Verifique os ids recebidos do JSON Server
+    })
+    .catch(error => {
+      console.error('Erro ao buscar os dados:', error);
+    });
+
+  // Aguardar o carregamento dos IDs
   await axios.get(url)
     .then(response => {
       const parser = new xml2js.Parser();
@@ -29,53 +42,71 @@ router.get('/continente', async function(req, res, next) {
     .catch(error => {
       console.error("Erro na requisição:", error);
     });
-  
-       let produtos = []
-       let id = 0
 
-       for (let url of lista_urls) {
-        await axios.get(url)
-          .then(resp => {
-            const $ = cheerio.load(resp.data);
-            const productId = url.match(/(\d+).html/)[1];
-            const productName = $('.pwc-h3.col-h3.product-name.pwc-font--primary-extrabold.mb-0').text().trimStart().replace(/^\s/, '').trimEnd().replace(/\s$/, '');
-            const productPrice = $('.ct-price-formatted').text().trimStart().replace(/^\s/, '').trimEnd().replace(/\s$/, '').replace(/€/, '').replace(/,/, '.');
-            if (productName && productPrice) {
-              try {
-                const product_obj = {"id": productId, "product_dsc": productName, "product_price": productPrice}
-                const productStr = JSON.stringify(product_obj);
-                const product = JSON.parse(productStr)
-                produtos.push(product);
-                console.log(product)
-                id += 1
-              }
-              catch (error) {
-              }
-            }
-          })
-          .catch(error => {
-            console.log(error)
-            res.render('error', {error: error})
-          })
-       }
-     for (let produto of produtos) {
-         let id = parseInt(produto.id)
-           try {
-             const resp = await axios.get(`http://localhost:3000/products_info/${id}`)
-              let prod = resp.data
-              if (prod) {
-                prod["product_price"] = produto.price
-                console.log(prod)
-                await axios.put(`http://localhost:3000/products_info/${id}`, prod)
-              }
+  let produtos = [];
+  let i = 0;
+  for (let url of lista_urls) {
+    console.log(`${i}/${lista_urls.length}`);  // Mostrar qual URL está sendo processada
+    i += 1;
+
+    const idMatch = url.match(/(\d+).html/);
+    let productId = 0;
+    if (idMatch) {
+      productId =  String(idMatch[1]).trim();
+      //console.log(productId)
+    }
+
+    //console.log(`Extrair ID: ${productId}`);  // Verificar o ID extraído da URL
+
+    if (productId && ids.includes(productId)) {
+      console.log("ID encontrado na lista de IDs!");  // Confirmação de que está no `if`
+
+      await axios.get(url)
+        .then(resp => {
+          console.log("Entrei no if");
+          const $ = cheerio.load(resp.data);
+          const productName = $('.pwc-h3.col-h3.product-name.pwc-font--primary-extrabold.mb-0')
+            .text().trimStart().replace(/^\s/, '').trimEnd().replace(/\s$/, '');
+          const productPrice = $('.ct-price-formatted').text().trimStart().replace(/^\s/, '')
+            .trimEnd().replace(/\s$/, '').replace(/€/, '').replace(/,/, '.');
+
+          if (productName && productPrice) {
+            try {
+              const product_obj = { "id": productId, "product_dsc": productName, "product_price": productPrice };
+              const productStr = JSON.stringify(product_obj);
+              const product = JSON.parse(productStr);
+              produtos.push(product);
             }
             catch (error) {
+              console.error("Erro ao processar o produto:", error);
             }
-        }
-//  res.render('index', { title: 'Express', produtos:  produtos});
-//  res.status(200).jsonp(produtos)
-  res.status(200).send("Precos atualizados")
-});
+          }
+        })
+        .catch(error => {
+          console.error("Erro ao acessar a URL do produto:", error);
+        });
+    } else {
+      //console.log("ID não encontrado na lista de IDs ou não corresponde.");
+    }
+  }
+
+  for (let produto of produtos) {
+    let id = parseInt(produto.id);
+    try {
+      const resp = await axios.get(`http://localhost:3000/products_info/${id}`);
+      let prod = resp.data;
+      if (prod) {
+        prod["product_price"] = produto.product_price;  // Corrigido o nome da variável
+        await axios.put(`http://localhost:3000/products_info/${id}`, prod);
+      }
+    }
+    catch (error) {
+      console.error("Erro ao atualizar o produto:", error);
+    }
+  }
+
+  res.status(200).send("Preços atualizados");
+})
 
 router.get('/continente/:id', async function(req, res, next) {
   start = req.params.id
