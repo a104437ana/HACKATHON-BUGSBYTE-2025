@@ -5,6 +5,12 @@ block content
     h1
       b= title
     p
+    h3 
+        b Nome: 
+        span #{nome}
+    h3 
+        b Id: 
+        span #{id}
 
     if suggestions && suggestions.length>0
       include components/searchBar.pug

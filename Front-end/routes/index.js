@@ -25,7 +25,7 @@ router.post('/search', (req, res) => {
   const suggestionObject = JSON.parse(req.body.search); 
   const product = suggestionObject.sku;
   axios.get(`http://localhost:3001/produtos/${product}`)
-  .then(resp => {res.status(200).render("produtos", {title: "Produtos", date: date, suggestions: [], prices : [{store: "Continente", price: resp.data["20231226"]}]})
+  .then(resp => {res.status(200).render("produto", {title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["sku"], date: date, suggestions: [], prices : [{store: "Continente", price: resp.data["20231226"]}]})
   console.log(resp.data["20231226"])});
 });
 
