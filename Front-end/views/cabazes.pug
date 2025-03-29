@@ -9,28 +9,33 @@ block content
         table.w3-table-all
           tr.w3-red.w3-text-black
             th Cabaz
+            th Produtos
             th Preço
           each cabaz in cabazes
             tr
               td= cabaz.name
+              td
+                ul
+                  for l in lista 
+                    li= l
               td= cabaz.price
     p
     - let p = (cabazes[0].price * 100).toFixed(1)
     if cabazes[0].price == 1
       .w3-panel.w3-yellow
-        p O produto&nbsp;
+        p O cabaz&nbsp;
           b #{nome}&nbsp;
           span no continente tem o mesmo preço que na concorrência&nbsp;
     else if cabazes[0].price < 1
       .w3-panel.w3-green
-        p O produto&nbsp;
+        p O cabaz&nbsp;
           b #{nome}&nbsp;
           span no continente está mais barato&nbsp;
           b #{p}%&nbsp; 
           span que na concorrência&nbsp;
     else if cabazes[0].price > 1
       .w3-panel.w3-red
-        p O produto&nbsp;
+        p O cabaz&nbsp;
           b #{nome}&nbsp;
           span no continete está mais caro&nbsp;
           b #{p}%&nbsp;
