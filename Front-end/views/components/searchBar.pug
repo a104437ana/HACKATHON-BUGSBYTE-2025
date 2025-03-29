@@ -1,10 +1,7 @@
-.w3-container.search-container.w3-bar
+.w3-container.search-container
   form(action='/search', method='POST')
-    input(class="w3-input w3-border w3-round w3-bar-item w3-left-align" type="text" id="search" name="search" placeholder="Produto" autocomplete="off")
+    input(class="w3-input w3-border w3-round" type="text" id="search" placeholder="Produto" autocomplete="off")
     .autocomplete-suggestions(class="w3-input w3-border w3-round" id="suggestions-container")
-    .w3-bar-item.w3-right
-      button(type="submit" class="w3-btn w3-blue w3-round")
-        img(src="/images/search.png" style="width: 20px; height: 20px;")
 
 style.
   .w3-container .autocomplete-suggestions {
@@ -13,18 +10,12 @@ style.
     color: #000; 
   }
 
-  .w3-btn {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 20px; 
-  }
-
 script.
   const suggestions = !{JSON.stringify(suggestions)};
 
   const searchInput = document.getElementById('search');
   const suggestionsContainer = document.getElementById('suggestions-container');
+  const form = document.querySelector('form');
 
   searchInput.addEventListener('input', function() {
     const query = searchInput.value.toLowerCase();
@@ -40,9 +31,10 @@ script.
           suggestionItem.classList.add('autocomplete-suggestion');
           suggestionItem.textContent = suggestion.product_dsc;
           suggestionItem.onclick = () => {
-            searchInput.value = suggestion.product_dsc;
+            searchInput.value = suggestion;
             suggestionsContainer.innerHTML = '';
             suggestionsContainer.style.display = 'none';
+            form.submit();
           };
           suggestionsContainer.appendChild(suggestionItem);
         });
