@@ -16,11 +16,14 @@ block content
               td= cabaz.name
               td
                 ul
+                  - let i = 0
                   for l in lista 
-                    li= l
+                    li
+                      a.w3-hover-text-blue(href=`/produtos/${ll[i]}`)= l
+                    - i+=1
               td= cabaz.price
     p
-    - let p = (cabazes[0].price * 100).toFixed(1)
+    - let p = Math.abs((100 - (cabazes[0].price * 100)).toFixed(1))
     if cabazes[0].price == 1
       .w3-panel.w3-yellow
         p O cabaz&nbsp;
