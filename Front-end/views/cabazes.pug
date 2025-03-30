@@ -21,7 +21,13 @@ block content
                     li
                       a.w3-hover-text-blue(href=`/produtos/${ll[i]}`)= l
                     - i+=1
-              td #{cabaz.total} €
+              td 
+                ul 
+                  li.w3-text-red 
+                    b Continente: #{cabaz.totalCont} €
+                  li Pingo Doce: #{cabaz.totalPingo_Doce} €
+                  li Mercadona: #{cabaz.totalMercadona} €
+                  li Minipreço: #{cabaz.total_Minipreco} €
     p
     - let p = Math.abs((100 - (cabazes[0].indice * 100)).toFixed(1))
     if cabazes[0].indice == 1
