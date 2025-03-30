@@ -16,8 +16,12 @@ block content
       include components/searchBar.pug
 
     else
+      .w3-card-4.w3-orange.w3-container 
+        p
+          b Valor Recomendado:
+      p
       if prices && prices.length > 0
-        table.w3-table-all
+        table.w3-table-all.w3-container 
           tr.w3-red.w3-text-black
             th Loja
             th Preço

@@ -43,13 +43,15 @@ router.get('/cabazes', async function(req, res, next) {
         lista.push(resp.data["product_dsc"])
         ll.push(resp.data["id"])
         indice_cabaz += resp.data["20231226"];
-        total_cabaz += resp.data["product_price"];
+        if (resp.data["product_price"]) {
+          total_cabaz += parseFloat(resp.data["product_price"]);
+        }
         i += 1
       });
   }
     indice_cabaz = indice_cabaz/i
     console.log(total_cabaz)
-      res.status(200).render("cabazes", {title: "Cabazes", date: date, ll: ll, lista: lista, cabazes: [{name: "Cabaz essencial", indice: indice_cabaz, total: total_cabaz}]})
+      res.status(200).render("cabazes", {title: "Cabazes", date: date, ll: ll, lista: lista, cabazes: [{name: "Cabaz essencial", indice: indice_cabaz, total: total_cabaz.toFixed(1)}]})
   }); 
 
 
