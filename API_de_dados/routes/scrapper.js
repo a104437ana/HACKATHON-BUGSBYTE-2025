@@ -86,7 +86,7 @@ router.get('/continente', async function(req, res, next) {
       const resp = await axios.get(`http://localhost:3000/products_info/${id}`);
       let prod = resp.data;
       if (prod) {
-        prod["product_price"] = produto.product_price;  // Corrigido o nome da variável
+        prod["product_price"] = produto.product_price; 
         await axios.put(`http://localhost:3000/products_info/${id}`, prod);
       }
     }

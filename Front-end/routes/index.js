@@ -24,17 +24,15 @@ router.get('/produtos/:id',function(req,res,next) {
       if (resp.data["product_dsc"] === undefined) {
         res.render('error',{title: "Erro", date: date, m:"Produto não existe"});
       } else {
-        console.log(resp.data['product_price'])
         let reco = resp.data['product_price']
         if (resp.data["20231226"] >= 1) {
           let n = resp.data['product_price']/resp.data["20231226"] - 0.01
           let x = n
           reco = x.toFixed(2)
         }
-        console.log(reco)
         res.status(200).render("produto", {reco: reco, title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["id"], date: date, suggestions: [],index : resp.data["20231226"], prices : [{store: "Continente", price: resp.data["product_price"]}, {store: "Pingo Doce", price: resp.data["pingo_doce_price"]}, {store: "Mercadona", price: resp.data["mercadona_price"]}, {store: "Minipreço", price: resp.data["minipreco_price"]}
       ]})}
-    console.log(resp.data["20231226"])});
+    });
 })
 
 router.get('/cabazes', async function(req, res, next) {
