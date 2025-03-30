@@ -1,4 +1,6 @@
-# Projeto feito na HACKATHON BUGSBYTE 2025 🪲
+# Price Optimizer
+## Projeto feito na HACKATHON BUGSBYTE 2025 🪲
+Uma aplicação web que permite pesquisar um produto do Continente e fornece o preço deste, a variação em relação ao mercado, o preço noutros supermercados, e um preço recomendado para este produto. A aplicação também permite ver o preço de um cabaz típico, e a variação deste em relação ao mercado. Utilizamos web scraping para obter dados reais dos preços do Continente e o dataset fornecido para saber o índice de preço.
 ## Tema da MC SONAE - Ferramenta de otimização de preços 💲
 ### Como correr:
 Abrir 3 terminais:
