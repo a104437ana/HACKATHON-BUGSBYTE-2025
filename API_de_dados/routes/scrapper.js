@@ -164,7 +164,7 @@ router.get('/produtos_info/:id', function(req, res, next) {
 });
 
 // GET precos mini preco
-router.get('/minipreco/mercearia', async function(req, res, next) {
+router.get('/minipreco', async function(req, res, next) {
   step = 1
   total_category = {0:183, 1:6, 3:183, 5:14, 6:10, 7:26, 8:8, 9:35, 10:3, 11:18, 12:2}
   start = 0
