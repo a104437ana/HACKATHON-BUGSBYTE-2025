@@ -29,7 +29,17 @@ router.get('/produtos/:id',function(req,res,next) {
         res.render('error',{title: "Erro", date: date, m:"Produto não existe"});
       } else {
         console.log(resp.data['product_price'])
-        res.status(200).render("produto", {title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["id"], date: date, suggestions: [], pa : resp.data['product_price'], prices : [{store: "Continente", price: resp.data["20231226"]}
+        let reco = resp.data['product_price']
+        if (resp.data["20231226"] >= 1) {
+          let n = Math.floor(resp.data['product_price']/resp.data["20231226"] - 0.01)
+          let x = n + 0.99
+          if (x > resp.data['product_price']) {
+            x = ((n -1) + 0.99).toFixed(2)
+          }
+          reco = x
+        }
+        console.log(reco)
+        res.status(200).render("produto", {reco: reco, title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["id"], date: date, suggestions: [], pa : resp.data['product_price'], prices : [{store: "Continente", price: resp.data["20231226"]}
       ]})}
     console.log(resp.data["20231226"])});
 })
