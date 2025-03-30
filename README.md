@@ -1,29 +1,35 @@
-BUGBUSTERS
+# Projeto feito na HACKATON BUGSBYTE 2025 🪲
+## Tema da MC SONAE - Ferramenta de otimização de preços 💲
+### Como correr:
+Abrir 3 terminais:
 
-## Minipreco
-
-/c/WEB.001.000.00000?q=%3Arelevance&page=0&disp=2000
-
-001.000.00000 - Frutas e Vegetais
-002.000.00000 - Padaria e Pastelaria
-003.000.00000 - Mercearia
-004.000.00000 - 
-005.000.00000 - Laticínios e ovos
-006.000.00000 - Gelados e congelados
-007.000.00000 - Bebidas e garrafeira
-008.000.00000 - Bebé e criança
-009.000.00000 - Higiene e beleza
-010.000.00000 - Animais de estimação
-011.000.00000 - Limpeza e cuidado do lar
-012.000.00000 - Pronto a comer
-013.000.00000 - Natal
-014.000.00000 - Páscoa
-001.000.00000 - 
-001.000.00000 - 
-
-## Continente
-
-values variacao
-sku
-time
-count vendas
+No primeiro terminal correr o json-server:
+```
+json-server Dados/data.json --watch
+```
+No segundo terminal correr a API de dados:
+```
+cd API_de_dados
+```
+```
+npm i
+```
+```
+npm start
+```
+No terceiro terminal correr o Front-end:
+```
+cd Front-end
+```
+```
+npm i
+```
+```
+npm start
+```
+Por fim, explorar a aplicação web:
+http://localhost:3002/
+## Equipa BUGBUSTERS 🪲
+- Ana Sá Oliveira
+- Inês Silva Marques
+- José Rafael de Oliveira Vilas-Boas
