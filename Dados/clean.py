@@ -9,7 +9,7 @@ with open(filename, "r", encoding="utf-8") as file:
 
 # Filtrar os objetos que possuem a chave 'product_price'
 filtered_products = [
-    product for product in data["products_info"] if "product_price" in product
+    product for product in data["products_info"] if ("product_price" in product) and ("preco_minipreco" in product)
 ]
 
 # Atualizar os dados com a lista filtrada
