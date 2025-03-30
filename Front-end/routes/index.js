@@ -27,12 +27,9 @@ router.get('/produtos/:id',function(req,res,next) {
         console.log(resp.data['product_price'])
         let reco = resp.data['product_price']
         if (resp.data["20231226"] >= 1) {
-          let n = Math.floor(resp.data['product_price']/resp.data["20231226"] - 0.01)
-          let x = n + 0.99
-          if (x > resp.data['product_price']) {
-            x = ((n -1) + 0.99).toFixed(2)
-          }
-          reco = x
+          let n = resp.data['product_price']/resp.data["20231226"] - 0.01
+          let x = n
+          reco = x.toFixed(2)
         }
         console.log(reco)
         res.status(200).render("produto", {reco: reco, title: "Produto " + resp.data["product_dsc"], nome: resp.data["product_dsc"], id: resp.data["id"], date: date, suggestions: [],index : resp.data["20231226"], prices : [{store: "Continente", price: resp.data["product_price"]}, {store: "Pingo Doce", price: resp.data["pingo_doce_price"]}, {store: "Mercadona", price: resp.data["mercadona_price"]}, {store: "Minipreço", price: resp.data["minipreco_price"]}
