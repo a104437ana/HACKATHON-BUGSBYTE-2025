@@ -1,10 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios');
-const bodyParser = require('body-parser');
-
-// Middleware para processar o corpo da requisição
-router.use(bodyParser.urlencoded({ extended: true }));
 
 /* GET home page. */
 router.get('/',function(req,res,next) {
@@ -78,12 +74,5 @@ router.post('/search', (req, res) => {
   res.redirect(`/produtos/${product}`);
 });
 
-router.get('/atualizaprecos', async function(req, res, next) {
-  let pagina = 0
-  for (pagina = 0; pagina < 150; pagina+=1) {
-    await axios.get(`http://localhost:3001/continente/${pagina}`)
-    console.log(`Pagina ${pagina}`)
-  }
-});
 
 module.exports = router;
