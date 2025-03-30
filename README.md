@@ -1,4 +1,4 @@
-# Projeto feito na HACKAThON BUGSBYTE 2025 🪲
+# Projeto feito na HACKATHON BUGSBYTE 2025 🪲
 ## Tema da MC SONAE - Ferramenta de otimização de preços 💲
 ### Como correr:
 Abrir 3 terminais:
