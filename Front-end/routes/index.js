@@ -30,7 +30,7 @@ router.get('/produtos/:id',function(req,res,next) {
 
 router.get('/cabazes', async function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
-  let produtos = [6927230, 5254224, 6654470, 2456648, 6022110, 6927230, 3795692]
+  let produtos = [6927230, 5254224, 6654470, 6927230, 3795692]
   let indice_cabaz = 0
   let total_cabaz = 0
   let i = 0
@@ -51,7 +51,7 @@ router.get('/cabazes', async function(req, res, next) {
   }
     indice_cabaz = indice_cabaz/i
     console.log(total_cabaz)
-      res.status(200).render("cabazes", {title: "Cabazes", date: date, ll: ll, lista: lista, cabazes: [{name: "Cabaz essencial", indice: indice_cabaz, total: total_cabaz.toFixed(1)}]})
+      res.status(200).render("cabazes", {title: "Cabazes", date: date, ll: ll, lista: lista, cabazes: [{name: "Cabaz essencial", indice: indice_cabaz, total: total_cabaz.toFixed(2)}]})
   }); 
 
 

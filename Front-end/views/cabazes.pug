@@ -7,7 +7,7 @@ block content
     p
     if cabazes && cabazes.length > 0
         table.w3-table-all
-          tr.w3-red.w3-text-black
+          tr.w3-grey.w3-text-black
             th Cabaz
             th Produtos
             th Preço
@@ -21,7 +21,7 @@ block content
                     li
                       a.w3-hover-text-blue(href=`/produtos/${ll[i]}`)= l
                     - i+=1
-              td= cabaz.total
+              td #{cabaz.total} €
     p
     - let p = Math.abs((100 - (cabazes[0].indice * 100)).toFixed(1))
     if cabazes[0].indice == 1

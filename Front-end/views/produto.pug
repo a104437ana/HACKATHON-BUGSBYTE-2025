@@ -22,13 +22,13 @@ block content
       p
       if prices && prices.length > 0
         table.w3-table-all.w3-container 
-          tr.w3-red.w3-text-black
+          tr.w3-grey.w3-text-black
             th Loja
             th Preço
           each price in prices
             tr
               td= price.store
-              td= pa
+              td #{pa} €
     - let p = Math.abs((100 - (prices[0].price * 100)).toFixed(1))
     if prices[0].price == 1
       .w3-panel.w3-yellow
@@ -46,6 +46,6 @@ block content
       .w3-panel.w3-red
         p O produto&nbsp;
           b #{nome}&nbsp;
-          span no continete está mais caro&nbsp;
+          span no continente está mais caro&nbsp;
           b #{p}%&nbsp;
           span que a concorrência&nbsp;
