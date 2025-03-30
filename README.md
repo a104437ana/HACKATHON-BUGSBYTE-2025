@@ -35,3 +35,5 @@ http://localhost:3002/
 - Ana Sá Oliveira
 - Inês Silva Marques
 - José Rafael de Oliveira Vilas Boas
+
+![BUGBUSTERS](bug.png)
