@@ -1,4 +1,4 @@
-# Projeto feito na HACKATON BUGSBYTE 2025 🪲
+# Projeto feito na HACKAThON BUGSBYTE 2025 🪲
 ## Tema da MC SONAE - Ferramenta de otimização de preços 💲
 ### Como correr:
 Abrir 3 terminais:
@@ -32,4 +32,4 @@ http://localhost:3002/
 ## Equipa BUGBUSTERS 🪲
 - Ana Sá Oliveira
 - Inês Silva Marques
-- José Rafael de Oliveira Vilas-Boas
+- José Rafael de Oliveira Vilas Boas
