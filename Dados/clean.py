@@ -1,7 +1,7 @@
 import json
 
 # Nome do arquivo JSON
-filename = "dados.json"
+filename = "data.json"
 
 # Carregar os dados do arquivo
 with open(filename, "r", encoding="utf-8") as file:
