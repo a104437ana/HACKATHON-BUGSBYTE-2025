@@ -218,10 +218,10 @@ router.get('/produtos_info/:id', function(req, res, next) {
 
 router.get('/minipreco/mercearia', async function(req, res, next) {
   step = 1
-  total = 183
+  total_category = {0:183, 1:6, 3:183, 5:14, 6:10, 7:26, 8:8, 9:35, 10:3, 11:18, 12:2}
 //  total = 1
   start = 0
-  let url = `https://www.minipreco.pt/produtos/mercearia/c/WEB.003.000.00000?q=%3Arelevance&page=${start}&disp=2000`;
+//  let url = `https://www.minipreco.pt/produtos/mercearia/c/WEB.0${String(category).padStart(2, '0')}.000.00000?q=%3Arelevance&page=${start}&disp=2000`;
 //  let produtos = []
   let id = 0
 
@@ -232,54 +232,61 @@ router.get('/minipreco/mercearia', async function(req, res, next) {
     produtosContinente_map[product.product_dsc] = product.id
   })
 
-  while (start < total) {
-    url = `https://www.minipreco.pt/produtos/mercearia/c/WEB.003.000.00000?q=%3Arelevance&page=${start}&disp=2000`;
-    try {
-      const resp = await axios.get(url);
-      const $ = cheerio.load(resp.data);
-      const productPromises = $('.product-list__item').map(async (index, element) => {
-        const productName = $(element).find('.details').text().trimStart().replace(/^\s/, '');
-        const productPrice = $(element).find('.price').text().trimStart().replace(/^\s/, '').replace(/€/, '').trimEnd().replace(/\s$/, '');
+  for (let [category, total] of Object.entries(total_category)) {
+    console.log("Categoria: " + category)
+    console.log("Total: " + total)
+    while (start < total) {
+      url = `https://www.minipreco.pt/produtos/mercearia/c/WEB.0${String(category).padStart(2, '0')}.000.00000?q=%3Arelevance&page=${start}&disp=2000`;
+      console.log(url)
+      try {
+        const resp = await axios.get(url);
+        const $ = cheerio.load(resp.data);
+        const productPromises = $('.product-list__item').map(async (index, element) => {
+          const productName = $(element).find('.details').text().trimStart().replace(/^\s/, '');
+          const productPrice = $(element).find('.price').text().trimStart().replace(/^\s/, '').replace(/€/, '').trimEnd().replace(/\s$/, '');
 
-        console.log(id)
-        if (productName && productPrice) {
-          let bestMatch = null
-          let highestScore = 0
-          produtosContinente_list.forEach(item => {
-            let itemContinente = item
-            let similarity = natural.JaroWinklerDistance(productName.toUpperCase(), item.toUpperCase())
-            if (similarity > highestScore) {
-              highestScore = similarity
-              bestMatch = itemContinente
-            }
-          })
-          if (highestScore > 0.88) {
-            try {
-              let id_continente = produtosContinente_map[bestMatch]
-              const respContinente = await axios.get(`http://localhost:3000/products_info/${id_continente}`)
-              let product = respContinente.data
-              product["preco_minipreco"] = productPrice
-  //            const product_obj = {"id": id, "product_dsc": productName, "product_price": productPrice}
-  //            const productStr = JSON.stringify(product_obj);
-  //            const product = JSON.parse(productStr)
-  //            console.log(product)
-              await axios.put(`https://localhost:3000/products_info/${id_continente}`, product)
-  //            produtos.push(product);
-            }
-            catch (error) {
-              console.log("Erro: " + productName + " " + highestScore)
+          console.log(id)
+          if (productName && productPrice) {
+            let bestMatch = null
+            let highestScore = 0
+            produtosContinente_list.forEach(item => {
+              let itemContinente = item
+              let similarity = natural.JaroWinklerDistance(productName.toUpperCase(), item.toUpperCase())
+              if (similarity > highestScore) {
+                highestScore = similarity
+                bestMatch = itemContinente
+              }
+            })
+            if (highestScore > 0.88) {
+              try {
+                let id_continente = produtosContinente_map[bestMatch]
+                const respContinente = await axios.get(`http://localhost:3000/products_info/${id_continente}`)
+                let product = respContinente.data
+                product["preco_minipreco"] = productPrice
+    //            const product_obj = {"id": id, "product_dsc": productName, "product_price": productPrice}
+    //            const productStr = JSON.stringify(product_obj);
+    //            const product = JSON.parse(productStr)
+    //            console.log(product)
+                await axios.put(`http://localhost:3000/products_info/${id_continente}`, product)
+                console.log(product)
+    //            produtos.push(product);
+              }
+              catch (error) {
+                console.log("Erro: " + productName + " " + highestScore)
+              }
             }
           }
-        }
-        id += 1
-      }).get()
-      await Promise.all(productPromises);
+          id += 1
+        }).get()
+        await Promise.all(productPromises);
+      }
+      catch (error) {
+        console.log(error)
+        res.render('error', {error: error})
+      }
+      start += step;
     }
-    catch (error) {
-      console.log(error)
-      res.render('error', {error: error})
-    }
-    start += step;
+    start = 0
   }/*
   produtosMinipreco = {
     "minipreco": produtos
