@@ -6,8 +6,14 @@ const bodyParser = require('body-parser');
 // Middleware para processar o corpo da requisição
 router.use(bodyParser.urlencoded({ extended: true }));
 
-
 /* GET home page. */
+router.get('/',function(req,res,next) {
+  var date = new Date().toLocaleString('pt-PT', { hour12: false });
+  res.status(200).render("index", {date: date})
+})
+
+
+/* GET products page. */
 router.get('/produtos', function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
   axios.get('http://localhost:3001/produtos_info')
@@ -30,7 +36,7 @@ router.get('/produtos/:id',function(req,res,next) {
 
 router.get('/cabazes', async function(req, res, next) {
   var date = new Date().toLocaleString('pt-PT', { hour12: false });
-  let produtos = [6927230, 5254224, 6654470, 6927230, 3795692]
+  let produtos = [6927230, 5254224, 6654470, 2203031, 3795692, 7825575, 2816831, 6919055, 7579107, 5038799, 7403557, 4636366, 7848011, 2597619]
   let indice_cabaz = 0
   let total_cabaz = 0
   let i = 0
